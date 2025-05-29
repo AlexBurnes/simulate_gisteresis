@@ -4,8 +4,8 @@ local Terminal = require "terminal"
 -- Simulation state
 M.NUM_TERMINALS = 1000
 M.OPERATOR_THRESHOLDS = {0.5, 0.3, 0.2}
-M.gap_up = 0.05
-M.gap_down = 0
+M.gap_up = 0.02
+M.gap_down = 0.00
 M.REGISTRATION_ATTEMPTS = 3
 
 M.operators = {}
@@ -63,7 +63,7 @@ function M.update_operator_hysteresis()
             current_percent = (M.operators[i].registered / total_registered)
         end
         if M.operator_open[i] then
-            if current_percent >= (M.OPERATOR_THRESHOLDS[i] + M.gap_up) then
+            if current_percent > (M.OPERATOR_THRESHOLDS[i] + M.gap_up) then
                 M.operator_open[i] = false
             end
         else
@@ -76,7 +76,28 @@ end
 
 function M.can_register_in_operator(op_index)
     M.update_operator_hysteresis()
-    return M.operator_open[op_index]
+    -- If any operator is open, use normal logic
+    local any_open = false
+    for i = 1, #M.operators do
+        if M.operator_open[i] then
+            any_open = true
+            break
+        end
+    end
+    if any_open then
+        return M.operator_open[op_index]
+    else
+        -- All closed: allow registration if below threshold + gap_up
+        local total_registered = 0
+        for i = 1, #M.operators do
+            total_registered = total_registered + M.operators[i].registered
+        end
+        local current_percent = 0
+        if total_registered > 0 then
+            current_percent = (M.operators[op_index].registered / total_registered)
+        end
+        return current_percent < (M.OPERATOR_THRESHOLDS[op_index] + M.gap_up)
+    end
 end
 
 function M.pick_random_operator(exclude)
