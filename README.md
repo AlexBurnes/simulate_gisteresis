@@ -10,6 +10,8 @@ A simulation of mobile terminal registration and operator distribution, built wi
 - Responsive layout, clear and non-overlapping UI
 - Modular MVC code structure (`model.lua`, `view.lua`, `controller.lua`, `terminal.lua`)
 
+![Simulation +2%](simulation.jpg "Screenshot")
+
 ## Requirements
 - [LÖVE2D](https://love2d.org/) (tested with 11.x)
 

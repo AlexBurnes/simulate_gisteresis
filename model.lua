@@ -2,11 +2,11 @@ local M = {}
 local Terminal = require "terminal"
 
 -- Simulation state
-M.NUM_TERMINALS = 1000
+M.NUM_TERMINALS = 100
 M.OPERATOR_THRESHOLDS = {0.5, 0.3, 0.2}
 M.gap_up = 0.02
 M.gap_down = 0.00
-M.REGISTRATION_ATTEMPTS = 3
+M.REGISTRATION_ATTEMPTS = 4
 
 M.operators = {}
 -- M.terminals is a list of Terminal objects (see terminal.lua)
